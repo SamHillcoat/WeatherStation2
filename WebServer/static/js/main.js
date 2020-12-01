@@ -1,6 +1,10 @@
 "use strict"
 
+const STORED_DATA_JSON_URL = "http://0.0.0.0:50000/static/data/stored_data.json";
 
+function testFetch() {
+    fetch('static/stored_data.json').then((response) => console.log(response));
+}
 
 function generateFakeWindData() {
   let rawData = [];
