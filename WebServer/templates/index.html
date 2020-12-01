@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <title>Deviot Weather Station</title>
+    <meta content="">
+    <meta charset="UTF-8">
+
+    <style></style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="static/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+      
+  </head>
+  <body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--no-drawer-button">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <!-- Title -->
+          <div class="mdl-layout-spacer"></div>
+          <span class="mdl-layout-title">Deviot Weather Station</span>
+          <!-- Add spacer, to align navigation to the right -->
+          <div class="mdl-layout-spacer"></div>
+          <!-- Navigation. We hide it in small screens. -->
+        </div>
+      </header>
+
+      <main class="mdl-layout__content">
+        <div class="page-content">
+          <div id="wind-chart-area">
+            <canvas id="windchart" width="800" height="400"></canvas>
+          </div>
+          
+          
+        </div>
+
+      </main>
+    </div>
+
+    <script src="{{ url_for('static', filename="js/main.js") }}"></script>
+
+  </body>
+</html>
