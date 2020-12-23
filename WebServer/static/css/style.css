@@ -1,5 +1,9 @@
-#wind-chart-area {
-    display: flex;
-    margin-top: 10vh;
+.wind-chart-area {
+    position: relative;
+    margin-top: 4vh;
+    margin-left: auto;
+    margin-right: auto;
     height: 50vh;
+    width: 80vw;
 }
+

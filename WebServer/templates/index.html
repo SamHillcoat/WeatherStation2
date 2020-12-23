@@ -26,21 +26,39 @@
           <div class="mdl-layout-spacer"></div>
           <!-- Navigation. We hide it in small screens. -->
         </div>
+        <div id="tabs-header" class="mdl-layout__tab-bar mdl-js-ripple-effect">
+          <div class="mdl-layout-spacer"></div>
+          <a href="#scroll-tab-1" class="mdl-layout__tab is-active">Wind</a>
+          <a href="#scroll-tab-2" class="mdl-layout__tab">Temperature</a>
+          <a href="#scroll-tab-3" class="mdl-layout__tab">Rain</a>
+
+          <div class="mdl-layout-spacer"></div>
+        </div>
       </header>
 
       <main class="mdl-layout__content">
-        <div class="page-content">
-          <div id="wind-chart-area">
-            <canvas id="windchart" width="800" height="400"></canvas>
+        <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
+          <div class="page-content">
+            <div class="page-content">
+              <div class="wind-chart-area">
+                <canvas id="windchart" width="800" height="400"></canvas>
+              </div> 
           </div>
-          
-          
         </div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-2">
+          <div class="page-content"><!-- Your content goes here --></div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-3">
+          <div class="page-content"><!-- Your content goes here --></div>
+        </section>
+
 
       </main>
     </div>
 
     <script src="{{ url_for('static', filename="js/main.js") }}"></script>
-
+    <img src="{{ url_for('static', filename="img/arrow.png") }}" id="pointarrowimg" >
+    <img id="source" src="https://image.flaticon.com/icons/png/128/25/25224.png">
   </body>
 </html>
