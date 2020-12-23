@@ -1,8 +1,8 @@
 .wind-chart-area {
     position: relative;
     margin-top: 4vh;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 10vw;
+    margin-right: 10vw;
     height: 50vh;
     width: 80vw;
 }
