@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/home/sam/.arduino15/packages/esp8266/tools/**",
+                "/home/sam/Arduino/libraries/**",
+                "/home/sam/Documents/Arduino/arduino-1.8.13/libraries/**",
+                "/home/sam/.arduino15/packages/esp8266/hardware/esp8266/2.7.4/**"
+            ],
+            "forcedInclude": [],
+            "defines": [
+                "USBCON"
+            ],
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++14"
+        }
+    ],
+    "version": 4
+}
