@@ -26,14 +26,14 @@ json_path = os.path.join(cwdir, 'static/stored_data.json')
 
 @app.route('/senddata', methods=['POST'])
 def send_data():
-    wind_speed = request.args.get('windspeed', default = None, type=float)
-    wind_dir = request.args.get('winddir', default = None, type=int)
+    wind_speed = request.form.get('windspeed', default = None, type=float)
+    wind_dir = request.form.get('winddir', default = None, type=int)
     now = datetime.datetime.now()
     timestamp = now.strftime("%a %b %d %Y %X")
     print(request)
 
-    new_data = {'x':wind_speed, 'y':timestamp, 'dir':wind_dir}
-    #output_to_json(new_data)
+    new_data = {'x':timestamp, 'y':wind_speed, 'dir':wind_dir}
+    output_to_json(new_data)
     print(new_data)
     return make_response(
         'Data Received',
@@ -52,6 +52,9 @@ def output_to_json(new_data):
         old_data = json.load(json_file) #type : list of dicts
 
     old_data.append(new_data) # append the new data to the list
+    
+    if (len(old_data) > 40):
+        old_data.pop(0)
 
     #output to file as json
     with open(json_path, "w") as json_file:

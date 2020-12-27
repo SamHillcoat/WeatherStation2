@@ -2,8 +2,10 @@
 
 const STORED_DATA_JSON_URL = "http://0.0.0.0:50000/static/data/stored_data.json";
 
-function testFetch() {
-    fetch('static/stored_data.json').then((response) => console.log(response));
+function fetchJsonData() {
+    fetch('static/stored_data.json')
+        .then(response => response.json())
+        .then(data => updateData(windchart, data));
 }
 
 function generateFakeWindData() {
@@ -23,32 +25,45 @@ function generateFakeWindData() {
 }
 
 
-let c = Date.now();
-function dynamicDataGen() {
-    let date
+
+function updateData(chart, newData) {
+    // callback from fetchJsonData(), runs when the json data is loaded from file
+    // updates the data on the chart
+    let diffData = newData.filter(obj => !chart.data.datasets[0].data.includes(obj["x"]));
+    if (chart.data.datasets[0].data.length >= 0) {
+        chart.data.datasets[0].data = newData;
+        chart.update();
+        return
+    }
+    /*if (diffData.length > 0) {
+        // Append the different data to the chart data array
+        chart.data.datasets[0].data.push.apply(chart.data.datasets[0].data, diffData);
+        chart.update();
+        console.log("Pushed new data to chart");
+    } */else {
+        return
+    }
+
 }
 
 
-let data = generateFakeWindData();
 
-// Arrow image for points on windchart graph (wind direction)
-
-
-
+let windchart;
 function generateWindChart () {
     let windchart_ctx = document.getElementById('windchart').getContext('2d');
 
+    // Arrow image for wind direction
     let newArrow = new Image();
     newArrow.src = '/static/img/arrow.svg';
     
     
-    let windchart = new Chart(windchart_ctx, {
+    windchart = new Chart(windchart_ctx, {
         type: 'line',
         data: {
             datasets: [{
                 label: "Windspeed",
                 pointStyle: newArrow,
-                data: data,
+                data: [],
                 fill: false,
                 borderColor: "rgb(75,192,192)",
                 lineTension: 0.2,
@@ -70,7 +85,7 @@ function generateWindChart () {
                 xAxes: [{
                     type: 'time',
                     time: {
-                        unit: "minute",
+                        unit: "second",
                         unitStepSize: 5
                     },
                     display: true,
@@ -92,3 +107,4 @@ function generateWindChart () {
 }
 
 window.onload = generateWindChart();
+setInterval(fetchJsonData, 5000);
