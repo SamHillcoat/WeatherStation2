@@ -26,8 +26,8 @@ json_path = os.path.join(cwdir, 'static/stored_data.json')
 
 @app.route('/senddata', methods=['POST'])
 def send_data():
-    wind_speed = request.json.get('windspeed', default = None, type=float)
-    wind_dir = request.json.get('winddir', default = None, type=int)
+    wind_speed = request.form.get('windspeed', default = None, type=float)
+    wind_dir = request.form.get('winddir', default = None, type=int)
     now = datetime.datetime.now()
     timestamp = now.strftime("%a %b %d %Y %X")
     print(request)
