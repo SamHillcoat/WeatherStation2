@@ -51,7 +51,7 @@ void fakeDataGen() {
   long windspeed = random(0,40);
   long winddir = random(0,359);
 
-  sprintf(fakeData, "{windspeed : %ld, winddir : %ld}", windspeed, winddir);
+  sprintf(fakeData, "{\"windspeed\" : %ld, \"winddir\" : %ld}", windspeed, winddir);
   delay(500);
 
 }
