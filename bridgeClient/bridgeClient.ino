@@ -118,12 +118,12 @@ void postRequest(const char *dataString) {
       Serial.printf("[HTTP] POST... code: %d\n", httpCode);
 
       // file found at server
-      if (httpCode == 301) {
+      if (httpCode == 200) {
         const String& payload = http.getString();
 
-        http.collectHeaders(headerKeys, numberOfHeaders);
+        //http.collectHeaders(headerKeys, numberOfHeaders);
         Serial.println("received payload:\n<<");
-        Serial.println(http.header("server"));
+        //Serial.println(http.header("server"));
         Serial.println(payload);
         Serial.println(">>");
       }

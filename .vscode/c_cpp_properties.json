@@ -3,10 +3,20 @@
         {
             "name": "Linux",
             "includePath": [
+                "/home/sam/.arduino15/packages/esp8266/hardware/esp8266/2.7.4/libraries/ESP8266HTTPClient/src",
+                "/home/sam/.arduino15/packages/esp8266/hardware/esp8266/2.7.4/libraries/ESP8266WiFi/src",
+                "/home/sam/Arduino/libraries/LoRa/src",
+                "/home/sam/.arduino15/packages/esp8266/hardware/esp8266/2.7.4/libraries/SPI",
+                "/home/sam/Arduino/libraries/MCCI_LoRaWAN_LMIC_library/src",
+                "/home/sam/Documents/Arduino/arduino-1.8.13/hardware/arduino/avr/libraries/SPI/src",
+                "/home/sam/Documents/Arduino/arduino-1.8.13/libraries/RadioHead",
+                "/home/sam/Documents/Arduino/arduino-1.8.13/tools/**",
+                "/home/sam/Documents/Arduino/arduino-1.8.13/hardware/tools/**",
+                "/home/sam/Documents/Arduino/arduino-1.8.13/hardware/arduino/avr/**",
                 "/home/sam/.arduino15/packages/esp8266/tools/**",
-                "/home/sam/Arduino/libraries/**",
                 "/home/sam/Documents/Arduino/arduino-1.8.13/libraries/**",
-                "/home/sam/.arduino15/packages/esp8266/hardware/esp8266/2.7.4/**"
+                "/home/sam/.arduino15/packages/esp8266/hardware/esp8266/2.7.4/**",
+                "/home/sam/Arduino/libraries/**"
             ],
             "forcedInclude": [],
             "defines": [

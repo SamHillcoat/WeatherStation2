@@ -11,7 +11,7 @@ Last Modified: 26/12/20 9:25 PM
 import requests, time
 from random import randint
 
-URL = "http://deviotweather.com/senddata"
+URL = "https://deviotweather.com/senddata"
 #URL = "http://127.0.0.1:5000/senddata"
 #URL = "https://deviotweather.free.beeceptor.com"
 
@@ -30,4 +30,4 @@ def generate_wind_data():
 
 for i in range(0,50):
     generate_wind_data()
-    time.sleep(1)
+    #time.sleep(1)
