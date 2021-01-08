@@ -36,7 +36,7 @@ def send_data():
     output_to_json(new_data)
     print(new_data)
     return make_response(
-        'Data Received' new_data,
+        str(new_data),
         200
     )
 
