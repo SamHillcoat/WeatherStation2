@@ -22,10 +22,11 @@
         <div class="mdl-layout__header-row">
           <!-- Title -->
           <div class="mdl-layout-spacer"></div>
-          <span class="mdl-layout-title">Deviot Weather Station</span>
+            <span class="mdl-layout-title" >Deviot Weather Station</span>
           <!-- Add spacer, to align navigation to the right -->
           <div class="mdl-layout-spacer"></div>
           <!-- Navigation. We hide it in small screens. -->
+          
         </div>
         <div id="tabs-header" class="mdl-layout__tab-bar mdl-js-ripple-effect">
           <div class="mdl-layout-spacer"></div>
@@ -54,11 +55,14 @@
           <div class="page-content"><!-- Your content goes here --></div>
         </section>
 
-
+        
       </main>
+      {% include 'footer.html'%}
     </div>
 
     <script src="{{ url_for('static', filename="js/main.js") }}"></script>
+
     
+
   </body>
 </html>

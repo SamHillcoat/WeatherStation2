@@ -1,66 +1,51 @@
-#include <LoRa.h>
-#include <SPI.h>
-
 #include <SparkFunHTU21D.h>
 #include <SparkFunMPL3115A2.h>
 
+/*
+ Weather Shield Example
+ By: Nathan Seidle
+ SparkFun Electronics
+ Date: June 10th, 2016
+ License: This code is public domain but you buy me a beer if you use this and we meet someday (Beerware license).
+ This example prints the current humidity, air pressure, temperature and light levels.
+ The weather shield is capable of a lot. Be sure to checkout the other more advanced examples for creating
+ your own weather station.
+ */
+
 #include <Wire.h> //I2C needed for sensors
-/* 
-Runs on weather station client arduino (Sparkfun Blackboard)
-Requires Dragino LoRa Sheild connected as default.
-
-Written by: Sam Hillcoat
-Last Modified: 5/1/21
-*/
-
 
 MPL3115A2 myPressure; //Create an instance of the pressure sensor
 HTU21D myHumidity; //Create an instance of the humidity sensor
 
-
-//Global Variables 
-long lastSecond; //The millis counter to see when a second rolls by
-#define SENDING_INTERVAL 5000 // Amount of millis between sending data
-
-//Hardware Pin Definitions
+//Hardware pin definitions
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 const byte STAT_BLUE = 7;
 const byte STAT_GREEN = 8;
 
 const byte REFERENCE_3V3 = A3;
+const byte LIGHT = A1;
 const byte BATT = A2;
 const byte WSPEED = 3;
 
-//Windspeed Variables
-//Windspeed is measured by the hardware interupt on D3 (wspeedIRQ)
-// One click per second in 2.4km/h
+//Windspeed
 long lastWindCheck = 0;
 volatile long lastWindIRQ = 0;
 volatile byte windClicks = 0;
+//Global Variables
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+long lastSecond; //The millis counter to see when a second rolls by
 
-//Global Variables - LoRa Shield
-
-int counter = 0;
-char fakeData[60];
-char weatherData[60];
-
-void setup() {
+void setup()
+{
   Serial.begin(9600);
-  while (!Serial);
-  
+  Serial.println("Weather Shield Example");
 
-  if (!LoRa.begin(915E6)) {
-    Serial.println("Starting LoRa failed!");
-    while (1);
-  }
-  Serial.println("LoRa Sender Online");
-
-
-  // Weather Sheild Setup
   pinMode(STAT_BLUE, OUTPUT); //Status LED Blue
   pinMode(STAT_GREEN, OUTPUT); //Status LED Green
   pinMode(WSPEED, INPUT_PULLUP);
-  pinMode(REFERENCE_3V3, INPUT);
 
+  pinMode(REFERENCE_3V3, INPUT);
+  pinMode(LIGHT, INPUT);
 
   //Configure the pressure sensor
   myPressure.begin(); // Get sensor online
@@ -73,23 +58,22 @@ void setup() {
 
   lastSecond = millis();
 
-  
+  Serial.println("Weather Shield online!");
 
   attachInterrupt(digitalPinToInterrupt(3), wspeedIRQ, FALLING);
-  Serial.println("Weather Shield online!");
 
 	// turn on interrupts
 	interrupts();
 }
 
-void loop() {
-
-  //Print readings every  5 seconds (change in global variables at top)
-  if (millis() - lastSecond >= SENDING_INTERVAL)
+void loop()
+{
+  //Print readings every second
+  if (millis() - lastSecond >= 1000)
   {
     digitalWrite(STAT_BLUE, HIGH); //Blink stat LED
 
-    lastSecond += SENDING_INTERVAL;
+    lastSecond += 1000;
 
     //Check Humidity Sensor
     float humidity = myHumidity.readHumidity();
@@ -127,61 +111,71 @@ void loop() {
       Serial.print(tempf, 2);
       Serial.print("C,");
 
-      /*
+      //Check light sensor
+      float light_lvl = get_light_level();
+      Serial.print(" light_lvl = ");
+      Serial.print(light_lvl);
+      Serial.print("V,");
+
       //Check batt level
       float batt_lvl = get_battery_level();
       Serial.print(" VinPin = ");
       Serial.print(batt_lvl);
       Serial.print("V");
-      */
 
-      //Windspeed
+      
+
       float windspeed = get_wind_speed();
       Serial.print(" Windspeed = ");
       Serial.print(windspeed);
       Serial.print("km/h");
 
       Serial.println();
-
-      send_data_over_lora();
     }
 
     digitalWrite(STAT_BLUE, LOW); //Turn off stat LED
   }
 
   delay(100);
-
 }
 
+//Returns the voltage of the light sensor based on the 3.3V rail
+//This allows us to ignore what VCC might be (an Arduino plugged into USB has VCC of 4.5 to 5.2V)
+float get_light_level()
+{
+  float operatingVoltage = analogRead(REFERENCE_3V3);
 
-void fakeDataGen() {
-  fakeData[0] = '\0';
-  // Generates fake weather data for testing
-  long windspeed = random(0,40);
-  long winddir = random(0,359);
+  float lightSensor = analogRead(LIGHT);
 
-  sprintf(fakeData, "{\"windspeed\" : %ld, \"winddir\" : %ld}", windspeed, winddir);
-  delay(3000);
+  operatingVoltage = 3.3 / operatingVoltage; //The reference voltage is 3.3V
 
+  lightSensor = operatingVoltage * lightSensor;
+
+  return (lightSensor);
 }
 
+//Returns the voltage of the raw pin based on the 3.3V rail
+//This allows us to ignore what VCC might be (an Arduino plugged into USB has VCC of 4.5 to 5.2V)
+//Battery level is connected to the RAW pin on Arduino and is fed through two 5% resistors:
+//3.9K on the high side (R1), and 1K on the low side (R2)
+float get_battery_level()
+{
+  float operatingVoltage = analogRead(REFERENCE_3V3);
 
-void generate_weather_data() {
-  weatherData[0] = '\0';
-  // Generates fake weather data for testing
-  long windspeed = get_wind_speed;
-  long winddir = random(0,359);
+  float rawVoltage = analogRead(BATT);
 
-  // TODO: Add other sensors to data array to be sent
+  operatingVoltage = 3.30 / operatingVoltage; //The reference voltage is 3.3V
 
-  sprintf(weatherData, "{\"windspeed\" : %ld, \"winddir\" : %ld}", windspeed, winddir);
-  //delay(100);
+  rawVoltage = operatingVoltage * rawVoltage; //Convert the 0 to 1023 int to actual voltage on BATT pin
 
+  rawVoltage *= 4.90; //(3.9k+1k)/1k - multiple BATT voltage by the voltage divider to get actual system voltage
+
+  return (rawVoltage);
 }
 
-void wspeedIRQ() {
+void wspeedIRQ()
 // Activated by the magnet in the anemometer (2 ticks per rotation), attached to input D3
-
+{
 	if (millis() - lastWindIRQ > 10) // Ignore switch-bounce glitches less than 10ms (142MPH max reading) after the reed switch closes
 	{
 		lastWindIRQ = millis(); //Grab the current time
@@ -189,7 +183,8 @@ void wspeedIRQ() {
 	}
 }
 
-float get_wind_speed() {
+float get_wind_speed()
+{
 	float deltaTime = millis() - lastWindCheck; //750ms
 
 	deltaTime /= 1000.0; //Covert to seconds
@@ -206,22 +201,4 @@ float get_wind_speed() {
 	 Serial.println(windSpeed);*/
 
 	return(windSpeed);
-}
-
-void send_data_over_lora() {
-  Serial.print("Sending packet: ");
-  Serial.println(weatherData);
-  
-
-  // send LoRa packet
-  LoRa.beginPacket();
-  LoRa.print(weatherData);
-  //LoRa.print(counter);
-  LoRa.endPacket();
-
-  // Counter for error checking
-  counter++;
-  Serial.print("Count: ");
-  Serial.print(counter);
-  Serial.println();
 }

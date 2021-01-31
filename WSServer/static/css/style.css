@@ -1,2 +1,11 @@
+#loginInput {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: relative;
+    margin-top: 3vh;
+    margin-left: 10vw;
+    margin-right: 10vw;
 
+}
 

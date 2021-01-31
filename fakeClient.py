@@ -16,7 +16,7 @@ URL = "https://deviotweather.com/senddata"
 #URL = "https://deviotweather.free.beeceptor.com"
 
 def post_data(data):
-    response = requests.post(URL, data = data)
+    response = requests.post(URL, json = data)
     print(response)
     
 
@@ -30,4 +30,4 @@ def generate_wind_data():
 
 for i in range(0,50):
     generate_wind_data()
-    #time.sleep(1)
+    time.sleep(1)

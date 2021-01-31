@@ -40,8 +40,12 @@ const char* password = "ur8aqaxszc";
 const char * headerKeys[] = {"Location", "server"} ;
 const size_t numberOfHeaders = 2;
 
-bool newDataFlag = false;
-char weatherData[30];
+volatile bool newDataFlag = false;
+volatile int loraPacketSize;
+int packetCount = 0;
+
+char weatherData[35]; // This number needs to be changed based on num of chars in lora Packet
+void ICACHE_RAM_ATTR onReceive();
 
 // Set up objects for wifi and http clients
 WiFiClientSecure client;
@@ -84,15 +88,32 @@ void setup() {
 
 void loop() {
    // postRequest();
-    delay(5000);
+    yield();
 
     if (newDataFlag) {
-        Serial.println("Packet Received: ");
-        Serial.print(weatherData);
+        readLoRaPacket();
+        packetCount++;
+        Serial.println(weatherData);
+        Serial.print("Count: ");
+        Serial.print(packetCount);
+        Serial.println();
         postRequest(weatherData);
-        weatherData[0] = '\0';
         newDataFlag = false;
+        
     }
+}
+
+void readLoRaPacket() {
+  Serial.print("Received Packet ");
+  weatherData[0] = '\0';
+
+  for (int i = 0; i < loraPacketSize; i++) {
+    //Serial.println("Recieved packe: (ISR)");
+    //Serial.print((char)LoRa.read());
+    weatherData[i] = (char)LoRa.read();
+  }
+  weatherData[loraPacketSize] = '\0';
+  
 }
 
 
@@ -137,13 +158,9 @@ void postRequest(const char *dataString) {
 }
 
 void onReceive(int packetSize) {
+  // Interupt callback when lora packet is recieved
   // packet received
   newDataFlag = true;
+  loraPacketSize = packetSize;
 
-  for (int i = 0; i < packetSize; i++) {
-    //Serial.println("Recieved packe: (ISR)");
-    //Serial.print((char)LoRa.read());
-
-    weatherData[i] = (char)LoRa.read();
-  }
 }
