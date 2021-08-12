@@ -58,8 +58,8 @@ void setup() {
 
     Serial.println();
 
-    WiFi.begin(ssid, password);
-
+    //WiFi.begin(ssid, password);
+/*
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
@@ -67,7 +67,7 @@ void setup() {
     Serial.println("");
     Serial.print("Connected! IP address: ");
     Serial.println(WiFi.localIP());
-
+*/
     // LoRa Setup
     Serial.println("Connecting to LoRa...");
 
@@ -97,7 +97,7 @@ void loop() {
         Serial.print("Count: ");
         Serial.print(packetCount);
         Serial.println();
-        postRequest(weatherData);
+        //postRequest(weatherData);
         newDataFlag = false;
         
     }

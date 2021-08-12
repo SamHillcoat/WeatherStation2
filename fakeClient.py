@@ -11,8 +11,8 @@ Last Modified: 26/12/20 9:25 PM
 import requests, time
 from random import randint
 
-URL = "https://deviotweather.com/senddata"
-#URL = "http://127.0.0.1:5000/senddata"
+#URL = "https://deviotweather.com/senddata"
+URL = "http://127.0.0.1:5000/senddata"
 #URL = "https://deviotweather.free.beeceptor.com"
 
 def post_data(data):

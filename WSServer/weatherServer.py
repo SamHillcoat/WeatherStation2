@@ -60,10 +60,14 @@ def send_data():
     )
 
 @app.route('/clearalldata', methods=['GET'])
+@requires_login
 def clearAllData():
     # Clears all data in stored_data.json for reseting while testing
     with open(json_path, 'w') as json_file:
         json_file.write('[]')
+
+    flash("Data Cleared")
+    return redirect(url_for('admin'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

@@ -18,9 +18,7 @@
                 "/home/sam/.arduino15/packages/esp8266/hardware/esp8266/2.7.4/**",
                 "/home/sam/Arduino/libraries/**"
             ],
-            "forcedInclude": [
-                "/home/sam/Documents/Arduino/arduino-1.8.13/hardware/arduino/avr/cores/arduino/Arduino.h"
-            ],
+            "forcedInclude": [],
             "defines": [
                 "USBCON"
             ],
