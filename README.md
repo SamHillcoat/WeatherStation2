@@ -1,10 +1,14 @@
 # WeatherStation2
-Code for the weather station (2nd generation)
+Code for the new weather station (2020)
 
-WebServer contains all files for the website and server side of the weather station
+Includes both client and server code.
+Server runs on raspberry pi.
+Reciever runs on ESP8266.
 
-**TODO:**
-Add arrows to the wind graph
-Graphs for other data
-Create a server
-Ardunio code
+Weather station client runs on Arduino connected to weather sensor and LoRa radio.
+
+
+WebServer contains all files for the website and server side of the weather station.
+Website based on Python Flask.
+
+
